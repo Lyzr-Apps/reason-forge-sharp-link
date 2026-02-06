@@ -1,9 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, Text, Float, MeshDistortMaterial, Sphere, Box, RoundedBox, Cylinder, Environment, PerspectiveCamera, useTexture, Html, Center, Trail } from '@react-three/drei'
-import * as THREE from 'three'
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { callAIAgent, type AIAgentResponse, type NormalizedAgentResponse } from '@/lib/aiAgent'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -11,6 +9,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, ChevronDown, ChevronRight, AlertTriangle, CheckCircle2, XCircle, TrendingUp, Clock, Search, Plus, ArrowRight, Shield, Target, Brain, X, Zap, Activity, GitBranch } from 'lucide-react'
+
+// Dynamic imports for 3D components (disable SSR)
+const Background3DScene = dynamic(() => import('@/components/Scene3D').then(mod => ({ default: mod.Background3DScene })), { ssr: false })
+const Loading3DScene = dynamic(() => import('@/components/Scene3D').then(mod => ({ default: mod.Loading3DScene })), { ssr: false })
 
 // ============================================================================
 // TYPES - Based on actual response schemas
@@ -150,202 +152,8 @@ interface AnalysisItem {
 }
 
 // ============================================================================
-// 3D COMPONENTS
+// 3D COMPONENTS - All 3D components are dynamically imported to avoid SSR issues
 // ============================================================================
-
-// Animated Background Particles
-function BackgroundParticles() {
-  const particlesRef = useRef<THREE.Points>(null)
-  const count = 500
-
-  const positions = new Float32Array(count * 3)
-  const colors = new Float32Array(count * 3)
-
-  for (let i = 0; i < count * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 50
-    positions[i + 1] = (Math.random() - 0.5) * 50
-    positions[i + 2] = (Math.random() - 0.5) * 50
-
-    // Deep navy to electric blue gradient
-    const t = Math.random()
-    colors[i] = 0.1 + t * 0.13     // R
-    colors[i + 1] = 0.12 + t * 0.39  // G
-    colors[i + 2] = 0.21 + t * 0.75  // B
-  }
-
-  useFrame((state) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.05
-      particlesRef.current.rotation.x = state.clock.elapsedTime * 0.02
-    }
-  })
-
-  return (
-    <points ref={particlesRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          count={count}
-          array={colors}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial size={0.08} vertexColors transparent opacity={0.6} />
-    </points>
-  )
-}
-
-// Floating 3D Brain Icon
-function BrainSphere({ position = [0, 0, 0] }: { position?: [number, number, number] }) {
-  return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-      <mesh position={position}>
-        <Sphere args={[0.8, 32, 32]}>
-          <MeshDistortMaterial
-            color="#3b82f6"
-            attach="material"
-            distort={0.3}
-            speed={2}
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </Sphere>
-      </mesh>
-    </Float>
-  )
-}
-
-// 3D Confidence Meter
-function Confidence3DMeter({ confidence, position }: { confidence: number; position: [number, number, number] }) {
-  const barRef = useRef<THREE.Mesh>(null)
-
-  useFrame(() => {
-    if (barRef.current) {
-      const targetScale = confidence / 100
-      barRef.current.scale.x = THREE.MathUtils.lerp(barRef.current.scale.x, targetScale, 0.1)
-    }
-  })
-
-  const color = confidence >= 75 ? '#10b981' : confidence >= 50 ? '#3b82f6' : '#f59e0b'
-
-  return (
-    <group position={position}>
-      <RoundedBox args={[3, 0.3, 0.1]} radius={0.05} position={[0, 0, 0]}>
-        <meshStandardMaterial color="#1a1f36" opacity={0.3} transparent />
-      </RoundedBox>
-      <mesh ref={barRef} position={[-1.5, 0, 0.05]} scale={[1, 1, 1]}>
-        <boxGeometry args={[3, 0.3, 0.1]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} />
-      </mesh>
-      <Text
-        position={[0, 0.5, 0]}
-        fontSize={0.2}
-        color="#3b82f6"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {confidence.toFixed(0)}% Confidence
-      </Text>
-    </group>
-  )
-}
-
-// 3D Causal Chain Node
-function CausalNode({ label, position, color = "#3b82f6" }: { label: string; position: [number, number, number]; color?: string }) {
-  return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.3}>
-      <group position={position}>
-        <RoundedBox args={[1.2, 0.6, 0.3]} radius={0.1}>
-          <meshStandardMaterial
-            color={color}
-            emissive={color}
-            emissiveIntensity={0.3}
-            metalness={0.5}
-            roughness={0.3}
-          />
-        </RoundedBox>
-        <Text
-          position={[0, 0, 0.16]}
-          fontSize={0.12}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={1}
-        >
-          {label.substring(0, 30)}...
-        </Text>
-      </group>
-    </Float>
-  )
-}
-
-// 3D Arrow Connection
-function Arrow3D({ start, end }: { start: [number, number, number]; end: [number, number, number] }) {
-  const direction = new THREE.Vector3(end[0] - start[0], end[1] - start[1], end[2] - start[2])
-  const length = direction.length()
-  const midpoint: [number, number, number] = [
-    (start[0] + end[0]) / 2,
-    (start[1] + end[1]) / 2,
-    (start[2] + end[2]) / 2
-  ]
-
-  direction.normalize()
-  const quaternion = new THREE.Quaternion()
-  quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction)
-
-  return (
-    <group position={midpoint} quaternion={quaternion}>
-      <Cylinder args={[0.02, 0.02, length, 8]}>
-        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={0.5} />
-      </Cylinder>
-      <mesh position={[0, length / 2, 0]}>
-        <coneGeometry args={[0.08, 0.2, 8]} />
-        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={0.8} />
-      </mesh>
-    </group>
-  )
-}
-
-// Loading Animation 3D
-function LoadingAnimation3D() {
-  const groupRef = useRef<THREE.Group>(null)
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime
-    }
-  })
-
-  return (
-    <group ref={groupRef}>
-      <BrainSphere position={[0, 0, 0]} />
-      <Trail width={2} length={6} color="#3b82f6" attenuation={(t) => t * t}>
-        <mesh position={[2, 0, 0]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={1} />
-        </mesh>
-      </Trail>
-      <Trail width={2} length={6} color="#10b981" attenuation={(t) => t * t}>
-        <mesh position={[-2, 0, 0]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1} />
-        </mesh>
-      </Trail>
-      <Trail width={2} length={6} color="#f59e0b" attenuation={(t) => t * t}>
-        <mesh position={[0, 2, 0]}>
-          <sphereGeometry args={[0.2, 16, 16]} />
-          <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={1} />
-        </mesh>
-      </Trail>
-    </group>
-  )
-}
 
 // ============================================================================
 // MAIN COMPONENT
@@ -504,17 +312,7 @@ export default function ReasonForgeAI() {
     <div className="min-h-screen bg-gradient-to-br from-[#0a0f1e] via-[#1a1f36] to-[#0a0f1e] text-white">
       {/* 3D Background Canvas */}
       <div className="fixed inset-0 z-0">
-        <Canvas>
-          <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
-          <Suspense fallback={null}>
-            <BackgroundParticles />
-            <Environment preset="night" />
-          </Suspense>
-          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.3} />
-        </Canvas>
+        <Background3DScene />
       </div>
 
       {/* Header */}
@@ -852,18 +650,8 @@ function WorkspaceView({
 
         {/* 3D Visualization when analyzing */}
         {isAnalyzing && (
-          <div className="h-[400px] rounded-lg overflow-hidden border border-white/10 bg-[#0a0f1e]/50">
-            <Canvas>
-              <PerspectiveCamera makeDefault position={[0, 0, 8]} />
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} intensity={1} />
-              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
-              <Suspense fallback={null}>
-                <LoadingAnimation3D />
-                <Environment preset="night" />
-              </Suspense>
-              <OrbitControls enableZoom={false} />
-            </Canvas>
+          <div className="h-[400px] rounded-lg overflow-hidden border border-white/10 bg-[#0a0f1e]/50 relative">
+            <Loading3DScene />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
                 <p className="text-lg font-semibold text-white mb-2">Reasoning in progress...</p>
@@ -1138,16 +926,7 @@ function ChallengeModal({
           {isChallenging ? (
             <div className="py-16 text-center">
               <div className="h-[300px] rounded-lg overflow-hidden border border-white/10 bg-[#0a0f1e]/50 relative">
-                <Canvas>
-                  <PerspectiveCamera makeDefault position={[0, 0, 8]} />
-                  <ambientLight intensity={0.5} />
-                  <pointLight position={[10, 10, 10]} intensity={1} />
-                  <Suspense fallback={null}>
-                    <LoadingAnimation3D />
-                    <Environment preset="night" />
-                  </Suspense>
-                  <OrbitControls enableZoom={false} />
-                </Canvas>
+                <Loading3DScene />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="text-center">
                     <Loader2 className="w-12 h-12 mx-auto mb-4 animate-spin text-[#3b82f6]" />
