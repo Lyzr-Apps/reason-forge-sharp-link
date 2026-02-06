@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, Suspense } from 'react'
+import { useRef, Suspense, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Float, MeshDistortMaterial, Sphere, RoundedBox, Cylinder, Environment, PerspectiveCamera, Trail } from '@react-three/drei'
+import { OrbitControls, Float, MeshDistortMaterial, Sphere, Environment, PerspectiveCamera, Trail } from '@react-three/drei'
 import * as THREE from 'three'
 
 // Animated Background Particles
@@ -110,6 +110,16 @@ export function LoadingAnimation3D() {
 
 // Background 3D Scene
 export function Background3DScene() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <div className="w-full h-full bg-transparent" />
+  }
+
   return (
     <Canvas>
       <PerspectiveCamera makeDefault position={[0, 0, 10]} />
@@ -127,6 +137,16 @@ export function Background3DScene() {
 
 // Loading 3D Scene
 export function Loading3DScene() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <div className="w-full h-full bg-transparent" />
+  }
+
   return (
     <Canvas>
       <PerspectiveCamera makeDefault position={[0, 0, 8]} />
