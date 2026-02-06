@@ -1,0 +1,210 @@
+{
+  "agent_name": "Uncertainty Quantifier Agent",
+  "agent_id": "69858517ab4bf65a66ad0765",
+  "agent_purpose": "Assesses confidence levels and quantifies uncertainty",
+  "description": "Agent that quantifies uncertainty and assesses confidence in reasoning",
+  "response_schema": {
+    "status": "string",
+    "result": {
+      "overall_confidence": "number",
+      "confidence_breakdown": [
+        {
+          "claim": "string",
+          "confidence_percentage": "number",
+          "uncertainty_type": "string",
+          "reasoning": "string"
+        }
+      ],
+      "knowledge_gaps": [
+        {
+          "gap_id": "string",
+          "description": "string",
+          "impact_on_conclusions": "string",
+          "potential_resolution": "string"
+        }
+      ],
+      "critical_assumptions": [
+        {
+          "assumption": "string",
+          "justification": "string",
+          "risk_if_violated": "string",
+          "verifiability": "string"
+        }
+      ],
+      "uncertainty_metrics": {
+        "epistemic_uncertainty": "number",
+        "aleatory_uncertainty": "number",
+        "total_uncertainty": "number"
+      }
+    },
+    "metadata": {
+      "agent_name": "string",
+      "timestamp": "string"
+    }
+  },
+  "example_response": {
+    "status": "success",
+    "result": {
+      "overall_confidence": 65.0,
+      "confidence_breakdown": [
+        {
+          "claim": "Increased social media usage causes decreased attention span in teenagers",
+          "confidence_percentage": 65.0,
+          "uncertainty_type": "mixed",
+          "reasoning": "Correlation is well-established through multiple studies, but causal direction remains partially ambiguous due to potential confounding variables (e.g., underlying personality traits, educational environment). Longitudinal studies suggest directional influence, but experimental evidence is limited due to ethical constraints."
+        },
+        {
+          "claim": "Screen time directly impacts sleep quality through blue light exposure",
+          "confidence_percentage": 75.0,
+          "uncertainty_type": "epistemic",
+          "reasoning": "Mechanism is biologically plausible and supported by controlled studies showing melatonin suppression. However, individual variation in sensitivity and compensatory behaviors introduce uncertainty. More research needed on dose-response relationships and long-term effects."
+        },
+        {
+          "claim": "Parental monitoring reduces risky online behavior in adolescents",
+          "confidence_percentage": 55.0,
+          "uncertainty_type": "mixed",
+          "reasoning": "Evidence shows correlation, but causal attribution is complicated by selection effects (parents who monitor may differ systematically). Measurement challenges exist for 'monitoring' intensity and 'risky behavior' definitions. Aleatory uncertainty stems from individual differences in adolescent response to monitoring."
+        }
+      ],
+      "knowledge_gaps": [
+        {
+          "gap_id": "KG001",
+          "description": "Insufficient longitudinal data tracking the same individuals over extended periods (5+ years) to establish temporal precedence and rule out reverse causation",
+          "impact_on_conclusions": "high",
+          "potential_resolution": "Implement multi-year cohort studies with repeated measurements and control groups; utilize natural experiments when policy changes occur"
+        },
+        {
+          "gap_id": "KG002",
+          "description": "Limited understanding of individual differences in susceptibility to digital media effects (genetic, developmental, environmental factors)",
+          "impact_on_conclusions": "medium",
+          "potential_resolution": "Conduct studies examining moderating variables; develop personalized risk profiles using machine learning on comprehensive datasets"
+        },
+        {
+          "gap_id": "KG003",
+          "description": "Lack of standardized measurement protocols across studies for key variables (screen time, content type, engagement quality)",
+          "impact_on_conclusions": "medium",
+          "potential_resolution": "Establish interdisciplinary consensus on measurement standards; utilize objective tracking technologies rather than self-report"
+        }
+      ],
+      "critical_assumptions": [
+        {
+          "assumption": "Self-reported screen time data accurately reflects actual usage patterns",
+          "justification": "Most existing studies rely on participant recall and self-reporting due to practical constraints",
+          "risk_if_violated": "Systematic underestimation or overestimation of effects; misidentification of high-risk groups; ineffective interventions based on inaccurate exposure estimates",
+          "verifiability": "verifiable"
+        },
+        {
+          "assumption": "Effects observed in controlled laboratory settings generalize to real-world contexts",
+          "justification": "Experimental control is necessary for causal inference, but may sacrifice ecological validity",
+          "risk_if_violated": "Interventions may fail in natural settings; effect sizes may be over- or underestimated; important contextual moderators may be missed",
+          "verifiability": "partially_verifiable"
+        },
+        {
+          "assumption": "Current cohorts are representative of future generations' digital media interactions",
+          "justification": "Research necessarily studies existing populations, but technology evolves rapidly",
+          "risk_if_violated": "Findings may have limited temporal validity; policy recommendations may become outdated quickly; new risks may emerge unexpectedly",
+          "verifiability": "unverifiable"
+        },
+        {
+          "assumption": "Confounding variables have been adequately controlled or measured",
+          "justification": "Statistical controls and matching techniques used in observational studies",
+          "risk_if_violated": "Spurious causal conclusions; attribution of effects to wrong causes; ineffective or harmful interventions",
+          "verifiability": "partially_verifiable"
+        }
+      ],
+      "uncertainty_metrics": {
+        "epistemic_uncertainty": 0.45,
+        "aleatory_uncertainty": 0.25,
+        "total_uncertainty": 0.35
+      }
+    },
+    "metadata": {
+      "agent_name": "Uncertainty Quantifier Agent",
+      "timestamp": "2025-01-14T18:32:45Z"
+    }
+  },
+  "is_actual_tested": true,
+  "test_timestamp": "2026-02-06T06:15:17.507552",
+  "test_message_used": "Hello, provide a sample response",
+  "actual_test_response": {
+    "status": "success",
+    "result": {
+      "overall_confidence": 65.0,
+      "confidence_breakdown": [
+        {
+          "claim": "Increased social media usage causes decreased attention span in teenagers",
+          "confidence_percentage": 65.0,
+          "uncertainty_type": "mixed",
+          "reasoning": "Correlation is well-established through multiple studies, but causal direction remains partially ambiguous due to potential confounding variables (e.g., underlying personality traits, educational environment). Longitudinal studies suggest directional influence, but experimental evidence is limited due to ethical constraints."
+        },
+        {
+          "claim": "Screen time directly impacts sleep quality through blue light exposure",
+          "confidence_percentage": 75.0,
+          "uncertainty_type": "epistemic",
+          "reasoning": "Mechanism is biologically plausible and supported by controlled studies showing melatonin suppression. However, individual variation in sensitivity and compensatory behaviors introduce uncertainty. More research needed on dose-response relationships and long-term effects."
+        },
+        {
+          "claim": "Parental monitoring reduces risky online behavior in adolescents",
+          "confidence_percentage": 55.0,
+          "uncertainty_type": "mixed",
+          "reasoning": "Evidence shows correlation, but causal attribution is complicated by selection effects (parents who monitor may differ systematically). Measurement challenges exist for 'monitoring' intensity and 'risky behavior' definitions. Aleatory uncertainty stems from individual differences in adolescent response to monitoring."
+        }
+      ],
+      "knowledge_gaps": [
+        {
+          "gap_id": "KG001",
+          "description": "Insufficient longitudinal data tracking the same individuals over extended periods (5+ years) to establish temporal precedence and rule out reverse causation",
+          "impact_on_conclusions": "high",
+          "potential_resolution": "Implement multi-year cohort studies with repeated measurements and control groups; utilize natural experiments when policy changes occur"
+        },
+        {
+          "gap_id": "KG002",
+          "description": "Limited understanding of individual differences in susceptibility to digital media effects (genetic, developmental, environmental factors)",
+          "impact_on_conclusions": "medium",
+          "potential_resolution": "Conduct studies examining moderating variables; develop personalized risk profiles using machine learning on comprehensive datasets"
+        },
+        {
+          "gap_id": "KG003",
+          "description": "Lack of standardized measurement protocols across studies for key variables (screen time, content type, engagement quality)",
+          "impact_on_conclusions": "medium",
+          "potential_resolution": "Establish interdisciplinary consensus on measurement standards; utilize objective tracking technologies rather than self-report"
+        }
+      ],
+      "critical_assumptions": [
+        {
+          "assumption": "Self-reported screen time data accurately reflects actual usage patterns",
+          "justification": "Most existing studies rely on participant recall and self-reporting due to practical constraints",
+          "risk_if_violated": "Systematic underestimation or overestimation of effects; misidentification of high-risk groups; ineffective interventions based on inaccurate exposure estimates",
+          "verifiability": "verifiable"
+        },
+        {
+          "assumption": "Effects observed in controlled laboratory settings generalize to real-world contexts",
+          "justification": "Experimental control is necessary for causal inference, but may sacrifice ecological validity",
+          "risk_if_violated": "Interventions may fail in natural settings; effect sizes may be over- or underestimated; important contextual moderators may be missed",
+          "verifiability": "partially_verifiable"
+        },
+        {
+          "assumption": "Current cohorts are representative of future generations' digital media interactions",
+          "justification": "Research necessarily studies existing populations, but technology evolves rapidly",
+          "risk_if_violated": "Findings may have limited temporal validity; policy recommendations may become outdated quickly; new risks may emerge unexpectedly",
+          "verifiability": "unverifiable"
+        },
+        {
+          "assumption": "Confounding variables have been adequately controlled or measured",
+          "justification": "Statistical controls and matching techniques used in observational studies",
+          "risk_if_violated": "Spurious causal conclusions; attribution of effects to wrong causes; ineffective or harmful interventions",
+          "verifiability": "partially_verifiable"
+        }
+      ],
+      "uncertainty_metrics": {
+        "epistemic_uncertainty": 0.45,
+        "aleatory_uncertainty": 0.25,
+        "total_uncertainty": 0.35
+      }
+    },
+    "metadata": {
+      "agent_name": "Uncertainty Quantifier Agent",
+      "timestamp": "2025-01-14T18:32:45Z"
+    }
+  }
+}

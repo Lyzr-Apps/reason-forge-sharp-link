@@ -1,0 +1,212 @@
+{
+  "agent_name": "Causal Analysis Agent",
+  "agent_id": "698584ddc613a65b3c4193c4",
+  "agent_purpose": "Identifies cause-effect relationships, constructs causal chains, detects confounders",
+  "description": "Agent that analyzes causal relationships and identifies confounding variables in reasoning problems",
+  "response_schema": {
+    "status": "string",
+    "result": {
+      "causal_chains": [
+        {
+          "chain_id": "string",
+          "cause": "string",
+          "effect": "string",
+          "mechanism": "string",
+          "strength": "string",
+          "intermediary_steps": [
+            "string"
+          ]
+        }
+      ],
+      "confounders": [
+        {
+          "variable": "string",
+          "affects": [
+            "string"
+          ],
+          "impact": "string"
+        }
+      ],
+      "dependencies": [
+        {
+          "variable_a": "string",
+          "variable_b": "string",
+          "relationship_type": "string",
+          "direction": "string"
+        }
+      ],
+      "feedback_loops": [
+        "string"
+      ]
+    },
+    "metadata": {
+      "agent_name": "string",
+      "timestamp": "string"
+    }
+  },
+  "example_response": {
+    "status": "success",
+    "result": {
+      "causal_chains": [
+        {
+          "chain_id": "CC001",
+          "cause": "Increased rainfall in mountainous region",
+          "effect": "River flooding in downstream valley",
+          "mechanism": "Excess water accumulation exceeds river channel capacity, leading to overflow",
+          "strength": "strong",
+          "intermediary_steps": [
+            "Precipitation accumulates in watershed",
+            "Surface runoff increases",
+            "River discharge volume rises",
+            "Water level exceeds bank height"
+          ]
+        },
+        {
+          "chain_id": "CC002",
+          "cause": "Regular physical exercise",
+          "effect": "Improved cardiovascular health",
+          "mechanism": "Exercise strengthens heart muscle, improves circulation, and reduces arterial stiffness",
+          "strength": "strong",
+          "intermediary_steps": [
+            "Increased heart rate during activity",
+            "Enhanced blood flow to tissues",
+            "Cardiac muscle adaptation and strengthening",
+            "Improved oxygen delivery efficiency"
+          ]
+        }
+      ],
+      "confounders": [
+        {
+          "variable": "Socioeconomic status",
+          "affects": [
+            "Educational attainment",
+            "Health outcomes",
+            "Access to resources"
+          ],
+          "impact": "Higher socioeconomic status may independently influence both education and health, creating spurious correlations between the two"
+        },
+        {
+          "variable": "Seasonal temperature variation",
+          "affects": [
+            "Ice cream sales",
+            "Drowning incidents"
+          ],
+          "impact": "Warm weather increases both variables independently, creating correlation without direct causation"
+        }
+      ],
+      "dependencies": [
+        {
+          "variable_a": "Study hours",
+          "variable_b": "Test performance",
+          "relationship_type": "causal",
+          "direction": "a_to_b"
+        },
+        {
+          "variable_a": "Coffee consumption",
+          "variable_b": "Workplace productivity",
+          "relationship_type": "correlational",
+          "direction": "bidirectional"
+        },
+        {
+          "variable_a": "Shoe size",
+          "variable_b": "Reading ability (in children)",
+          "relationship_type": "confounded",
+          "direction": "bidirectional"
+        }
+      ],
+      "feedback_loops": [
+        "Economic growth \u2192 Increased investment \u2192 Enhanced infrastructure \u2192 Further economic growth",
+        "Stress \u2192 Poor sleep \u2192 Reduced cognitive function \u2192 Decreased work performance \u2192 Increased stress",
+        "Population growth \u2192 Resource depletion \u2192 Economic strain \u2192 Reduced birth rates \u2192 Population stabilization"
+      ]
+    },
+    "metadata": {
+      "agent_name": "Causal Analysis Agent",
+      "timestamp": "2025-01-18T10:30:00Z"
+    }
+  },
+  "is_actual_tested": true,
+  "test_timestamp": "2026-02-06T06:14:51.598170",
+  "test_message_used": "Hello, provide a sample response",
+  "actual_test_response": {
+    "status": "success",
+    "result": {
+      "causal_chains": [
+        {
+          "chain_id": "CC001",
+          "cause": "Increased rainfall in mountainous region",
+          "effect": "River flooding in downstream valley",
+          "mechanism": "Excess water accumulation exceeds river channel capacity, leading to overflow",
+          "strength": "strong",
+          "intermediary_steps": [
+            "Precipitation accumulates in watershed",
+            "Surface runoff increases",
+            "River discharge volume rises",
+            "Water level exceeds bank height"
+          ]
+        },
+        {
+          "chain_id": "CC002",
+          "cause": "Regular physical exercise",
+          "effect": "Improved cardiovascular health",
+          "mechanism": "Exercise strengthens heart muscle, improves circulation, and reduces arterial stiffness",
+          "strength": "strong",
+          "intermediary_steps": [
+            "Increased heart rate during activity",
+            "Enhanced blood flow to tissues",
+            "Cardiac muscle adaptation and strengthening",
+            "Improved oxygen delivery efficiency"
+          ]
+        }
+      ],
+      "confounders": [
+        {
+          "variable": "Socioeconomic status",
+          "affects": [
+            "Educational attainment",
+            "Health outcomes",
+            "Access to resources"
+          ],
+          "impact": "Higher socioeconomic status may independently influence both education and health, creating spurious correlations between the two"
+        },
+        {
+          "variable": "Seasonal temperature variation",
+          "affects": [
+            "Ice cream sales",
+            "Drowning incidents"
+          ],
+          "impact": "Warm weather increases both variables independently, creating correlation without direct causation"
+        }
+      ],
+      "dependencies": [
+        {
+          "variable_a": "Study hours",
+          "variable_b": "Test performance",
+          "relationship_type": "causal",
+          "direction": "a_to_b"
+        },
+        {
+          "variable_a": "Coffee consumption",
+          "variable_b": "Workplace productivity",
+          "relationship_type": "correlational",
+          "direction": "bidirectional"
+        },
+        {
+          "variable_a": "Shoe size",
+          "variable_b": "Reading ability (in children)",
+          "relationship_type": "confounded",
+          "direction": "bidirectional"
+        }
+      ],
+      "feedback_loops": [
+        "Economic growth \u2192 Increased investment \u2192 Enhanced infrastructure \u2192 Further economic growth",
+        "Stress \u2192 Poor sleep \u2192 Reduced cognitive function \u2192 Decreased work performance \u2192 Increased stress",
+        "Population growth \u2192 Resource depletion \u2192 Economic strain \u2192 Reduced birth rates \u2192 Population stabilization"
+      ]
+    },
+    "metadata": {
+      "agent_name": "Causal Analysis Agent",
+      "timestamp": "2025-01-18T10:30:00Z"
+    }
+  }
+}

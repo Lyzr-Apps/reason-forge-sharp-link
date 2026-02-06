@@ -1,0 +1,102 @@
+{
+  "agent_name": "Common Sense Validator Agent",
+  "agent_id": "698584fc49f279d47448a5b9",
+  "agent_purpose": "Validates logical consistency and flags implausible conclusions",
+  "description": "Agent that validates reasoning and checks for logical consistency",
+  "response_schema": {
+    "status": "string",
+    "result": {
+      "validation_checks": [
+        {
+          "check_id": "string",
+          "aspect_validated": "string",
+          "result": "string",
+          "explanation": "string",
+          "severity": "string"
+        }
+      ],
+      "implausible_conclusions": [
+        "any"
+      ],
+      "logical_consistency_score": "number",
+      "real_world_grounding_score": "number",
+      "overall_validity": "string",
+      "recommendations": [
+        "string"
+      ]
+    },
+    "metadata": {
+      "agent_name": "string",
+      "timestamp": "string"
+    }
+  },
+  "example_response": {
+    "status": "success",
+    "result": {
+      "validation_checks": [
+        {
+          "check_id": "causal_ordering_01",
+          "aspect_validated": "Temporal ordering of cause and effect",
+          "result": "pass",
+          "explanation": "The cause is stated to occur before the effect, which is logically consistent with causal reasoning.",
+          "severity": "minor"
+        },
+        {
+          "check_id": "real_world_01",
+          "aspect_validated": "Alignment with real-world constraints",
+          "result": "pass",
+          "explanation": "The scenario described follows rules that apply in the real world and doesn't require unrealistic assumptions.",
+          "severity": "minor"
+        }
+      ],
+      "implausible_conclusions": [],
+      "logical_consistency_score": 1.0,
+      "real_world_grounding_score": 1.0,
+      "overall_validity": "valid",
+      "recommendations": [
+        "Ensure causes are always described as occurring before effects.",
+        "Make sure assumptions are grounded in practical reality."
+      ]
+    },
+    "metadata": {
+      "agent_name": "Common Sense Validator Agent",
+      "timestamp": "2024-06-13T15:20:00Z"
+    }
+  },
+  "is_actual_tested": true,
+  "test_timestamp": "2026-02-06T06:14:54.802310",
+  "test_message_used": "Hello, provide a sample response",
+  "actual_test_response": {
+    "status": "success",
+    "result": {
+      "validation_checks": [
+        {
+          "check_id": "causal_ordering_01",
+          "aspect_validated": "Temporal ordering of cause and effect",
+          "result": "pass",
+          "explanation": "The cause is stated to occur before the effect, which is logically consistent with causal reasoning.",
+          "severity": "minor"
+        },
+        {
+          "check_id": "real_world_01",
+          "aspect_validated": "Alignment with real-world constraints",
+          "result": "pass",
+          "explanation": "The scenario described follows rules that apply in the real world and doesn't require unrealistic assumptions.",
+          "severity": "minor"
+        }
+      ],
+      "implausible_conclusions": [],
+      "logical_consistency_score": 1.0,
+      "real_world_grounding_score": 1.0,
+      "overall_validity": "valid",
+      "recommendations": [
+        "Ensure causes are always described as occurring before effects.",
+        "Make sure assumptions are grounded in practical reality."
+      ]
+    },
+    "metadata": {
+      "agent_name": "Common Sense Validator Agent",
+      "timestamp": "2024-06-13T15:20:00Z"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "workflow_created": true,
+  "agents": {
+    "causal_analysis_agent": {
+      "agent_id": "698584ddc613a65b3c4193c4",
+      "name": "Causal Analysis Agent",
+      "type": "sub-agent",
+      "provider": "Anthropic",
+      "model": "claude-sonnet-4-5",
+      "status": "created"
+    },
+    "common_sense_validator": {
+      "agent_id": "698584fc49f279d47448a5b9",
+      "name": "Common Sense Validator Agent",
+      "type": "sub-agent",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "status": "created"
+    },
+    "uncertainty_quantifier": {
+      "agent_id": "69858517ab4bf65a66ad0765",
+      "name": "Uncertainty Quantifier Agent",
+      "type": "sub-agent",
+      "provider": "Anthropic",
+      "model": "claude-sonnet-4-5",
+      "status": "created"
+    },
+    "reasoning_orchestrator": {
+      "agent_id": "69858540b90162af337b1e2d",
+      "name": "Reasoning Orchestrator",
+      "type": "manager",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "status": "created",
+      "managed_agents": [
+        "698584ddc613a65b3c4193c4",
+        "698584fc49f279d47448a5b9",
+        "69858517ab4bf65a66ad0765"
+      ]
+    },
+    "reasoning_challenger": {
+      "agent_id": "69858572ab4bf65a66ad076c",
+      "name": "Reasoning Challenger Agent",
+      "type": "independent",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "status": "created"
+    }
+  },
+  "total_agents": 5,
+  "manager_count": 1,
+  "sub_agent_count": 3,
+  "independent_agent_count": 1,
+  "created_at": "2026-02-06T00:00:00Z"
+}

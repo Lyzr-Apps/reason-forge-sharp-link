@@ -1,0 +1,42 @@
+{
+  "agent_name": "Reasoning Orchestrator",
+  "agent_id": "69858540b90162af337b1e2d",
+  "agent_purpose": "Coordinates sub-agents and synthesizes causal analysis",
+  "description": "Manager agent that coordinates other reasoning agents and synthesizes their outputs",
+  "response_schema": {
+    "status": "string (success|error)",
+    "result": {
+      "response": "string",
+      "action_taken": "string (optional)",
+      "data": "object (optional, any structured data)",
+      "suggestions": [
+        "string (optional)"
+      ]
+    },
+    "metadata": {
+      "agent_name": "string",
+      "timestamp": "string (ISO)"
+    }
+  },
+  "example_response": {
+    "status": "success",
+    "result": {
+      "response": "I've completed the task you requested",
+      "action_taken": "Processed the input and generated output",
+      "data": {
+        "key": "value"
+      },
+      "suggestions": [
+        "You might also want to try X"
+      ]
+    },
+    "metadata": {
+      "agent_name": "Reasoning Orchestrator",
+      "timestamp": "2025-01-15T10:30:00Z"
+    }
+  },
+  "is_actual_tested": false,
+  "test_timestamp": null,
+  "test_message_used": "Hello, provide a sample response",
+  "test_error": "Agent test timed out after 30 seconds"
+}
