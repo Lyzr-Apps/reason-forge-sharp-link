@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import { callAIAgent, type AIAgentResponse, type NormalizedAgentResponse } from '@/lib/aiAgent'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -9,10 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, ChevronDown, ChevronRight, AlertTriangle, CheckCircle2, XCircle, TrendingUp, Clock, Search, Plus, ArrowRight, Shield, Target, Brain, X, Zap, Activity, GitBranch } from 'lucide-react'
-
-// Dynamic imports for 3D components (disable SSR)
-const Background3DScene = dynamic(() => import('@/components/Scene3D').then(mod => ({ default: mod.Background3DScene })), { ssr: false })
-const Loading3DScene = dynamic(() => import('@/components/Scene3D').then(mod => ({ default: mod.Loading3DScene })), { ssr: false })
 
 // ============================================================================
 // TYPES - Based on actual response schemas
@@ -150,10 +145,6 @@ interface AnalysisItem {
   result?: ReasoningOrchestratorResult
   topic?: string
 }
-
-// ============================================================================
-// 3D COMPONENTS - All 3D components are dynamically imported to avoid SSR issues
-// ============================================================================
 
 // ============================================================================
 // MAIN COMPONENT
@@ -310,9 +301,10 @@ export default function ReasonForgeAI() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0f1e] via-[#1a1f36] to-[#0a0f1e] text-white">
-      {/* 3D Background Canvas */}
-      <div className="fixed inset-0 z-0">
-        <Background3DScene />
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-green-900/20 via-transparent to-transparent"></div>
       </div>
 
       {/* Header */}
@@ -648,17 +640,29 @@ function WorkspaceView({
           </CardContent>
         </Card>
 
-        {/* 3D Visualization when analyzing */}
+        {/* Loading Visualization when analyzing */}
         {isAnalyzing && (
-          <div className="h-[400px] rounded-lg overflow-hidden border border-white/10 bg-[#0a0f1e]/50 relative">
-            <Loading3DScene />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center">
-                <p className="text-lg font-semibold text-white mb-2">Reasoning in progress...</p>
-                <p className="text-sm text-gray-400">Analyzing causal relationships</p>
+          <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
+            <CardContent className="py-16">
+              <div className="flex flex-col items-center justify-center space-y-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-24 h-24 border-4 border-[#3b82f6]/30 rounded-full"></div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center animate-spin">
+                    <div className="w-24 h-24 border-4 border-transparent border-t-[#3b82f6] rounded-full"></div>
+                  </div>
+                  <div className="w-24 h-24 flex items-center justify-center">
+                    <Brain className="w-12 h-12 text-[#3b82f6]" />
+                  </div>
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-lg font-semibold text-white">Reasoning in progress...</p>
+                  <p className="text-sm text-gray-400">Analyzing causal relationships</p>
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )}
       </div>
 
@@ -925,14 +929,19 @@ function ChallengeModal({
 
           {isChallenging ? (
             <div className="py-16 text-center">
-              <div className="h-[300px] rounded-lg overflow-hidden border border-white/10 bg-[#0a0f1e]/50 relative">
-                <Loading3DScene />
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="text-center">
-                    <Loader2 className="w-12 h-12 mx-auto mb-4 animate-spin text-[#3b82f6]" />
-                    <p className="text-lg font-semibold">Challenging reasoning...</p>
+              <div className="flex flex-col items-center justify-center space-y-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-24 h-24 border-4 border-[#3b82f6]/30 rounded-full"></div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center animate-spin">
+                    <div className="w-24 h-24 border-4 border-transparent border-t-[#3b82f6] rounded-full"></div>
+                  </div>
+                  <div className="w-24 h-24 flex items-center justify-center">
+                    <Shield className="w-12 h-12 text-[#3b82f6]" />
                   </div>
                 </div>
+                <p className="text-lg font-semibold">Challenging reasoning...</p>
               </div>
             </div>
           ) : challengeResult ? (
