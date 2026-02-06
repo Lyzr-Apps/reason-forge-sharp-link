@@ -168,7 +168,7 @@ export default function ReasonForgeAI() {
 
   // Load history from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('reasonforge_history')
+    const saved = localStorage.getItem('bishforge_history')
     if (saved) {
       try {
         setAnalysisHistory(JSON.parse(saved))
@@ -182,7 +182,7 @@ export default function ReasonForgeAI() {
   useEffect(() => {
     if (analysisHistory.length > 0) {
       const timeoutId = setTimeout(() => {
-        localStorage.setItem('reasonforge_history', JSON.stringify(analysisHistory))
+        localStorage.setItem('bishforge_history', JSON.stringify(analysisHistory))
       }, 500) // Throttle saves to 500ms
       return () => clearTimeout(timeoutId)
     }
@@ -329,7 +329,7 @@ export default function ReasonForgeAI() {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-[#3b82f6] to-[#10b981] bg-clip-text text-transparent">
-                ReasonForge AI
+                BISHFORGE AI
               </h1>
               <p className="text-xs text-gray-400">Causal Reasoning & Explainability Platform</p>
             </div>
