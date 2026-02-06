@@ -671,55 +671,60 @@ function WorkspaceView({
         {currentAnalysis ? (
           <>
             {/* Overall Confidence */}
-            <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Target className="w-5 h-5 text-[#10b981]" />
-                  Overall Confidence
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-5xl font-bold text-[#10b981]">
-                    {currentAnalysis.uncertainty_assessment.overall_confidence.toFixed(0)}%
-                  </div>
-                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-[#3b82f6] to-[#10b981] transition-all duration-1000"
-                      style={{ width: `${currentAnalysis.uncertainty_assessment.overall_confidence}%` }}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-400">Epistemic</p>
-                      <p className="font-semibold">{currentAnalysis.uncertainty_assessment.uncertainty_metrics.epistemic_uncertainty.toFixed(1)}%</p>
+            {currentAnalysis.uncertainty_assessment && (
+              <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Target className="w-5 h-5 text-[#10b981]" />
+                    Overall Confidence
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="text-5xl font-bold text-[#10b981]">
+                      {currentAnalysis.uncertainty_assessment?.overall_confidence?.toFixed(0) ?? 'N/A'}%
                     </div>
-                    <div>
-                      <p className="text-gray-400">Aleatory</p>
-                      <p className="font-semibold">{currentAnalysis.uncertainty_assessment.uncertainty_metrics.aleatory_uncertainty.toFixed(1)}%</p>
+                    <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#3b82f6] to-[#10b981] transition-all duration-1000"
+                        style={{ width: `${currentAnalysis.uncertainty_assessment?.overall_confidence ?? 0}%` }}
+                      />
                     </div>
+                    {currentAnalysis.uncertainty_assessment?.uncertainty_metrics && (
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-gray-400">Epistemic</p>
+                          <p className="font-semibold">{currentAnalysis.uncertainty_assessment.uncertainty_metrics?.epistemic_uncertainty?.toFixed(1) ?? 'N/A'}%</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400">Aleatory</p>
+                          <p className="font-semibold">{currentAnalysis.uncertainty_assessment.uncertainty_metrics?.aleatory_uncertainty?.toFixed(1) ?? 'N/A'}%</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Causal Chains */}
-            <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
-              <CardHeader
-                className="cursor-pointer hover:bg-white/5 transition-colors"
-                onClick={() => toggleSection('causal')}
-              >
-                <CardTitle className="flex items-center justify-between text-lg">
-                  <span className="flex items-center gap-2">
-                    <GitBranch className="w-5 h-5 text-[#3b82f6]" />
-                    Causal Chains ({currentAnalysis.causal_analysis.causal_chains.length})
-                  </span>
-                  {expandedSections['causal'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                </CardTitle>
-              </CardHeader>
-              {expandedSections['causal'] && (
-                <CardContent className="space-y-4">
-                  {currentAnalysis.causal_analysis.causal_chains.map((chain, idx) => (
+            {currentAnalysis.causal_analysis?.causal_chains && (
+              <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
+                <CardHeader
+                  className="cursor-pointer hover:bg-white/5 transition-colors"
+                  onClick={() => toggleSection('causal')}
+                >
+                  <CardTitle className="flex items-center justify-between text-lg">
+                    <span className="flex items-center gap-2">
+                      <GitBranch className="w-5 h-5 text-[#3b82f6]" />
+                      Causal Chains ({currentAnalysis.causal_analysis.causal_chains.length})
+                    </span>
+                    {expandedSections['causal'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                  </CardTitle>
+                </CardHeader>
+                {expandedSections['causal'] && (
+                  <CardContent className="space-y-4">
+                    {currentAnalysis.causal_analysis.causal_chains.map((chain, idx) => (
                     <div key={chain.chain_id} className="p-4 bg-[#0a0f1e]/50 rounded-lg border border-white/10 space-y-3">
                       <div className="flex items-center gap-3">
                         <div className="flex-1">
@@ -754,43 +759,46 @@ function WorkspaceView({
                         Challenge This
                       </Button>
                     </div>
-                  ))}
-                </CardContent>
-              )}
-            </Card>
+                    ))}
+                  </CardContent>
+                )}
+              </Card>
+            )}
 
             {/* Validation Results */}
-            <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
-              <CardHeader
-                className="cursor-pointer hover:bg-white/5 transition-colors"
-                onClick={() => toggleSection('validation')}
-              >
-                <CardTitle className="flex items-center justify-between text-lg">
-                  <span className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
-                    Validation Results
-                  </span>
-                  {expandedSections['validation'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                </CardTitle>
-              </CardHeader>
-              {expandedSections['validation'] && (
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3 bg-[#0a0f1e]/50 rounded-lg">
-                      <p className="text-xs text-gray-400 mb-1">Logical Consistency</p>
-                      <p className="text-2xl font-bold text-[#10b981]">
-                        {currentAnalysis.validation_results.logical_consistency_score.toFixed(0)}%
-                      </p>
+            {currentAnalysis.validation_results && (
+              <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
+                <CardHeader
+                  className="cursor-pointer hover:bg-white/5 transition-colors"
+                  onClick={() => toggleSection('validation')}
+                >
+                  <CardTitle className="flex items-center justify-between text-lg">
+                    <span className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+                      Validation Results
+                    </span>
+                    {expandedSections['validation'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                  </CardTitle>
+                </CardHeader>
+                {expandedSections['validation'] && (
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-3 bg-[#0a0f1e]/50 rounded-lg">
+                        <p className="text-xs text-gray-400 mb-1">Logical Consistency</p>
+                        <p className="text-2xl font-bold text-[#10b981]">
+                          {currentAnalysis.validation_results?.logical_consistency_score?.toFixed(0) ?? 'N/A'}%
+                        </p>
+                      </div>
+                      <div className="p-3 bg-[#0a0f1e]/50 rounded-lg">
+                        <p className="text-xs text-gray-400 mb-1">Real-World Grounding</p>
+                        <p className="text-2xl font-bold text-[#3b82f6]">
+                          {currentAnalysis.validation_results?.real_world_grounding_score?.toFixed(0) ?? 'N/A'}%
+                        </p>
+                      </div>
                     </div>
-                    <div className="p-3 bg-[#0a0f1e]/50 rounded-lg">
-                      <p className="text-xs text-gray-400 mb-1">Real-World Grounding</p>
-                      <p className="text-2xl font-bold text-[#3b82f6]">
-                        {currentAnalysis.validation_results.real_world_grounding_score.toFixed(0)}%
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    {currentAnalysis.validation_results.validation_checks.map((check) => (
+                    {currentAnalysis.validation_results?.validation_checks && (
+                      <div className="space-y-2">
+                        {currentAnalysis.validation_results.validation_checks.map((check) => (
                       <div key={check.check_id} className="flex items-start gap-3 p-3 bg-[#0a0f1e]/50 rounded-lg">
                         {check.result === 'pass' ? (
                           <CheckCircle2 className="w-5 h-5 text-[#10b981] mt-0.5 flex-shrink-0" />
@@ -799,49 +807,53 @@ function WorkspaceView({
                         ) : (
                           <XCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                         )}
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm">{check.aspect_validated}</p>
-                          <p className="text-xs text-gray-400 mt-1">{check.explanation}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm">{check.aspect_validated}</p>
+                            <p className="text-xs text-gray-400 mt-1">{check.explanation}</p>
+                          </div>
                         </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
-            </Card>
+                    )}
+                  </CardContent>
+                )}
+              </Card>
+            )}
 
             {/* Key Insights */}
-            <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
-              <CardHeader
-                className="cursor-pointer hover:bg-white/5 transition-colors"
-                onClick={() => toggleSection('insights')}
-              >
-                <CardTitle className="flex items-center justify-between text-lg">
-                  <span className="flex items-center gap-2">
-                    <Brain className="w-5 h-5 text-[#f59e0b]" />
-                    Key Insights
-                  </span>
-                  {expandedSections['insights'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                </CardTitle>
-              </CardHeader>
-              {expandedSections['insights'] && (
-                <CardContent>
-                  <ul className="space-y-2">
-                    {currentAnalysis.synthesis.key_insights.map((insight, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm">
-                        <span className="w-6 h-6 flex items-center justify-center bg-[#3b82f6] text-white rounded-full flex-shrink-0 text-xs font-semibold">
-                          {idx + 1}
-                        </span>
-                        <span className="flex-1 pt-0.5">{insight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              )}
-            </Card>
+            {currentAnalysis.synthesis?.key_insights && (
+              <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
+                <CardHeader
+                  className="cursor-pointer hover:bg-white/5 transition-colors"
+                  onClick={() => toggleSection('insights')}
+                >
+                  <CardTitle className="flex items-center justify-between text-lg">
+                    <span className="flex items-center gap-2">
+                      <Brain className="w-5 h-5 text-[#f59e0b]" />
+                      Key Insights
+                    </span>
+                    {expandedSections['insights'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                  </CardTitle>
+                </CardHeader>
+                {expandedSections['insights'] && (
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {currentAnalysis.synthesis.key_insights.map((insight, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm">
+                          <span className="w-6 h-6 flex items-center justify-center bg-[#3b82f6] text-white rounded-full flex-shrink-0 text-xs font-semibold">
+                            {idx + 1}
+                          </span>
+                          <span className="flex-1 pt-0.5">{insight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                )}
+              </Card>
+            )}
 
             {/* Knowledge Gaps */}
-            {currentAnalysis.uncertainty_assessment.knowledge_gaps.length > 0 && (
+            {currentAnalysis.uncertainty_assessment?.knowledge_gaps && currentAnalysis.uncertainty_assessment.knowledge_gaps.length > 0 && (
               <Card className="bg-[#1a1f36]/60 backdrop-blur-md border-white/10">
                 <CardHeader
                   className="cursor-pointer hover:bg-white/5 transition-colors"
