@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback, memo } from 'react'
 import { callAIAgent, type AIAgentResponse, type NormalizedAgentResponse } from '@/lib/aiAgent'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -178,15 +178,18 @@ export default function ReasonForgeAI() {
     }
   }, [])
 
-  // Save history to localStorage
+  // Save history to localStorage with throttling
   useEffect(() => {
     if (analysisHistory.length > 0) {
-      localStorage.setItem('reasonforge_history', JSON.stringify(analysisHistory))
+      const timeoutId = setTimeout(() => {
+        localStorage.setItem('reasonforge_history', JSON.stringify(analysisHistory))
+      }, 500) // Throttle saves to 500ms
+      return () => clearTimeout(timeoutId)
     }
   }, [analysisHistory])
 
-  // Handle analysis
-  const handleAnalyze = async () => {
+  // Handle analysis - memoized
+  const handleAnalyze = useCallback(async () => {
     if (!currentProblem.trim() || currentProblem.length < 10) {
       alert('Please enter a problem statement (minimum 10 characters)')
       return
@@ -243,10 +246,10 @@ export default function ReasonForgeAI() {
     } finally {
       setIsAnalyzing(false)
     }
-  }
+  }, [currentProblem, REASONING_ORCHESTRATOR_ID])
 
-  // Handle challenge
-  const handleChallenge = async (conclusion: string) => {
+  // Handle challenge - memoized
+  const handleChallenge = useCallback(async (conclusion: string) => {
     setSelectedConclusion(conclusion)
     setShowChallengeModal(true)
     setIsChallenging(true)
@@ -272,10 +275,10 @@ export default function ReasonForgeAI() {
     } finally {
       setIsChallenging(false)
     }
-  }
+  }, [currentProblem, REASONING_CHALLENGER_ID])
 
-  // Extract topic from problem
-  const extractTopic = (problem: string): string => {
+  // Extract topic from problem - memoized
+  const extractTopic = useCallback((problem: string): string => {
     const words = problem.toLowerCase().split(' ')
     const keywords = ['employee', 'student', 'climate', 'business', 'health', 'technology', 'education']
     for (const keyword of keywords) {
@@ -284,20 +287,30 @@ export default function ReasonForgeAI() {
       }
     }
     return 'General'
-  }
+  }, [])
 
-  // Filter history
-  const filteredHistory = analysisHistory.filter(item =>
-    item.problem.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.topic?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Filter history - memoized with debounced search
+  const filteredHistory = useMemo(() => {
+    return analysisHistory.filter(item =>
+      item.problem.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.topic?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [analysisHistory, searchQuery])
 
-  // Stats
-  const totalAnalyses = analysisHistory.length
-  const avgConfidence = analysisHistory.length > 0
-    ? analysisHistory.filter(a => a.confidence > 0).reduce((sum, a) => sum + a.confidence, 0) / analysisHistory.filter(a => a.confidence > 0).length
-    : 0
-  const topTopics = Array.from(new Set(analysisHistory.map(a => a.topic).filter(Boolean))).slice(0, 3)
+  // Stats - memoized to prevent recalculation on every render
+  const totalAnalyses = useMemo(() => analysisHistory.length, [analysisHistory.length])
+
+  const avgConfidence = useMemo(() => {
+    if (analysisHistory.length === 0) return 0
+    const withConfidence = analysisHistory.filter(a => a.confidence > 0)
+    return withConfidence.length > 0
+      ? withConfidence.reduce((sum, a) => sum + a.confidence, 0) / withConfidence.length
+      : 0
+  }, [analysisHistory])
+
+  const topTopics = useMemo(() => {
+    return Array.from(new Set(analysisHistory.map(a => a.topic).filter(Boolean))).slice(0, 3)
+  }, [analysisHistory])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0f1e] via-[#1a1f36] to-[#0a0f1e] text-white">
@@ -386,10 +399,10 @@ export default function ReasonForgeAI() {
 }
 
 // ============================================================================
-// DASHBOARD VIEW
+// DASHBOARD VIEW - Memoized for performance
 // ============================================================================
 
-function DashboardView({
+const DashboardView = memo(function DashboardView({
   totalAnalyses,
   avgConfidence,
   topTopics,
@@ -564,13 +577,13 @@ function DashboardView({
       </div>
     </div>
   )
-}
+})
 
 // ============================================================================
-// WORKSPACE VIEW
+// WORKSPACE VIEW - Memoized for performance
 // ============================================================================
 
-function WorkspaceView({
+const WorkspaceView = memo(function WorkspaceView({
   currentProblem,
   setCurrentProblem,
   isAnalyzing,
@@ -895,13 +908,13 @@ function WorkspaceView({
       </div>
     </div>
   )
-}
+})
 
 // ============================================================================
-// CHALLENGE MODAL
+// CHALLENGE MODAL - Memoized for performance
 // ============================================================================
 
-function ChallengeModal({
+const ChallengeModal = memo(function ChallengeModal({
   selectedConclusion,
   isChallenging,
   challengeResult,
@@ -1047,4 +1060,4 @@ function ChallengeModal({
       </div>
     </div>
   )
-}
+})
